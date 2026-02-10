@@ -1,8 +1,8 @@
 # Django Core
-Django>=6.0.2
-djangorestframework==3.15.2
-django-cors-headers==4.4.0
-djangorestframework-simplejwt==5.3.0
+Django==5.0.0
+djangorestframework==3.14.0
+django-cors-headers==4.3.1
+djangorestframework-simplejwt==5.3.1
 django-filter==23.5
 
 # Production Server
@@ -10,31 +10,17 @@ gunicorn==21.2.0
 whitenoise==6.6.0
 
 # Database
-psycopg2-binary==2.9.9  # PostgreSQL adapter
+psycopg2-binary==2.9.9
 
 # Image Processing
 Pillow==10.1.0
-
-# Payment Processing
-stripe==14.3.0
 
 # Configuration
 python-decouple==3.8
 dj-database-url==2.1.0
 
-# Async Tasks
-celery==5.3.4
-redis==5.0.1
-
 # HTTP Requests
 requests==2.31.0
-
-# Social Media APIs
-instaloader==4.10.3
-google-api-python-client==2.108.0
-
-# Security
-cryptography==41.0.7
 
 # Utilities
 python-dateutil==2.8.2
