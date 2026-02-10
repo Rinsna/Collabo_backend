@@ -12,8 +12,8 @@ whitenoise==6.6.0
 # Database
 psycopg2-binary==2.9.9
 
-# Image Processing
-Pillow==10.1.0
+# Image Processing - Updated for Python 3.13 compatibility
+Pillow==10.4.0
 
 # Configuration
 python-decouple==3.8
