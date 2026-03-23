@@ -4,7 +4,11 @@ from .views import (
     RegisterView, LoginView, ProfileView,
     InfluencerProfileView, CompanyProfileView,
     InfluencerListView, InfluencerDetailView, CompanyListView,
-    change_password, delete_account, fetch_video_stats, get_video_stats
+    change_password, delete_account, fetch_video_stats, get_video_stats,
+    # Admin approval views
+    PendingInfluencersListView, AllInfluencersListView, AllUsersListView,
+    approve_influencer, reject_influencer, bulk_approve_influencers,
+    delete_influencer, approval_stats, mark_approval_shown
 )
 
 urlpatterns = [
@@ -21,4 +25,17 @@ urlpatterns = [
     path('delete-account/', delete_account, name='delete-account'),
     path('fetch-video-stats/', fetch_video_stats, name='fetch-video-stats'),
     path('get-video-stats/', get_video_stats, name='get-video-stats'),
+    
+    # Admin approval endpoints
+    path('admin/pending-influencers/', PendingInfluencersListView.as_view(), name='pending-influencers'),
+    path('admin/all-influencers/', AllInfluencersListView.as_view(), name='all-influencers'),
+    path('admin/all-users/', AllUsersListView.as_view(), name='all-users'),
+    path('admin/approve-influencer/<int:user_id>/', approve_influencer, name='approve-influencer'),
+    path('admin/reject-influencer/<int:user_id>/', reject_influencer, name='reject-influencer'),
+    path('admin/bulk-approve/', bulk_approve_influencers, name='bulk-approve-influencers'),
+    path('admin/delete-influencer/<int:user_id>/', delete_influencer, name='delete-influencer'),
+    path('admin/approval-stats/', approval_stats, name='approval-stats'),
+    
+    # Influencer approval status
+    path('mark-approval-shown/', mark_approval_shown, name='mark-approval-shown'),
 ]

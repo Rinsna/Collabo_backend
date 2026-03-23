@@ -357,3 +357,15 @@ def mark_payment_completed(request, pk):
         'pending_payment': float(company_profile.pending_payment),
         'total_spend': float(company_profile.total_spend)
     })
+
+class AdminCampaignListView(generics.ListAPIView):
+    """Admin-only view to see ALL campaigns on the platform"""
+    queryset = Campaign.objects.all().select_related('company')
+    serializer_class = CampaignSerializer
+    permission_classes = [permissions.IsAdminUser]
+
+class AdminCollaborationListView(generics.ListAPIView):
+    """Admin-only view to see ALL active collaborations"""
+    queryset = Collaboration.objects.all().select_related('request', 'direct_request')
+    serializer_class = CollaborationSerializer
+    permission_classes = [permissions.IsAdminUser]

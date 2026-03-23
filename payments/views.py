@@ -133,6 +133,11 @@ def earnings_summary(request):
             total=Sum('net_amount')
         )['total'] or 0
         
+        return Response({
+            'total_earnings': total_earnings,
+            'pending_earnings': pending_earnings
+        })
+        
     elif user.user_type == 'company':
         total_spent = Payment.objects.filter(
             payer=user, 
@@ -153,7 +158,16 @@ def earnings_summary(request):
             'pending_payments': pending_payments
         })
     
-    return Response({
-        'total_earnings': total_earnings,
-        'pending_earnings': pending_earnings
-    })
+    return Response({'error': 'Invalid user type'}, status=status.HTTP_400_BAD_REQUEST)
+
+class AdminPaymentListView(generics.ListAPIView):
+    """Admin-only view to see ALL platform payments"""
+    queryset = Payment.objects.all().select_related('payer', 'payee')
+    serializer_class = PaymentSerializer
+    permission_classes = [permissions.IsAdminUser]
+
+class AdminPayoutListView(generics.ListAPIView):
+    """Admin-only view to see ALL platform payouts"""
+    queryset = Payout.objects.all().select_related('user')
+    serializer_class = PayoutSerializer
+    permission_classes = [permissions.IsAdminUser]

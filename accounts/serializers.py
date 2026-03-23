@@ -37,6 +37,10 @@ class UserLoginSerializer(serializers.Serializer):
                 raise serializers.ValidationError('Invalid credentials')
             if not user.is_active:
                 raise serializers.ValidationError('User account is disabled')
+            
+            # Removed approval check - influencers can login regardless of approval status
+            # Warning message will be shown in the dashboard instead
+            
             attrs['user'] = user
             return attrs
         else:
@@ -95,8 +99,10 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'email', 'username', 'user_type', 'phone', 'is_verified', 
-                 'created_at', 'influencer_profile', 'company_profile')
-        read_only_fields = ('id', 'created_at')
+                 'created_at', 'influencer_profile', 'company_profile',
+                 'approval_status', 'is_approved', 'rejection_reason', 'approval_shown')
+        read_only_fields = ('id', 'created_at', 'approval_status', 'is_approved', 
+                           'rejection_reason', 'approval_shown')
 
 
 class ChangePasswordSerializer(serializers.Serializer):
@@ -120,3 +126,20 @@ class ChangePasswordSerializer(serializers.Serializer):
             raise serializers.ValidationError("Password must contain at least one number.")
         
         return value
+
+
+class PendingInfluencerSerializer(serializers.ModelSerializer):
+    """Serializer for pending influencer approval list"""
+    influencer_profile = InfluencerProfileSerializer(read_only=True)
+    
+    class Meta:
+        model = User
+        fields = ('id', 'email', 'username', 'user_type', 'phone', 
+                 'approval_status', 'created_at', 'influencer_profile')
+        read_only_fields = fields
+
+
+class ApprovalActionSerializer(serializers.Serializer):
+    """Serializer for approval/rejection actions"""
+    action = serializers.ChoiceField(choices=['approve', 'reject'], required=True)
+    rejection_reason = serializers.CharField(required=False, allow_blank=True)

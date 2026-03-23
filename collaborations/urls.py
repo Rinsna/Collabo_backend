@@ -6,7 +6,7 @@ from .views import (
     CollaborationListView, CollaborationDetailView,
     ReviewListCreateView, accept_collaboration_request,
     accept_direct_collaboration_request, reject_direct_collaboration_request,
-    mark_payment_completed
+    mark_payment_completed, AdminCampaignListView, AdminCollaborationListView
 )
 
 urlpatterns = [
@@ -23,4 +23,8 @@ urlpatterns = [
     path('collaborations/', CollaborationListView.as_view(), name='collaborations'),
     path('collaborations/<int:pk>/', CollaborationDetailView.as_view(), name='collaboration-detail'),
     path('reviews/', ReviewListCreateView.as_view(), name='reviews'),
+    
+    # Admin endpoints
+    path('admin/campaigns/', AdminCampaignListView.as_view(), name='admin-campaigns'),
+    path('admin/collaborations/', AdminCollaborationListView.as_view(), name='admin-collaborations'),
 ]

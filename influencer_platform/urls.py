@@ -14,6 +14,8 @@ def api_root(request):
             'collaborations': '/api/collaborations/',
             'payments': '/api/payments/',
             'social-media': '/api/social-media/',
+            'support': '/api/support/',
+            'landing': '/api/landing/',
         },
         'status': 'running'
     })
@@ -25,6 +27,8 @@ urlpatterns = [
     path('api/collaborations/', include('collaborations.urls')),
     path('api/payments/', include('payments.urls')),
     path('api/social-media/', include('social_media.urls')),
+    path('api/support/', include('support.urls')),
+    path('api/landing/', include('landing.urls')),
 ]
 
 if settings.DEBUG:

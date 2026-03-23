@@ -1,9 +1,11 @@
 from rest_framework import serializers
 from .models import Campaign, CollaborationRequest, DirectCollaborationRequest, Collaboration, Review
+from django.db.models import Sum, Count
 from accounts.serializers import UserSerializer
 
 class CampaignSerializer(serializers.ModelSerializer):
     company_name = serializers.SerializerMethodField()
+    progress = serializers.SerializerMethodField()
     
     class Meta:
         model = Campaign
@@ -15,6 +17,28 @@ class CampaignSerializer(serializers.ModelSerializer):
             return obj.company.company_profile.company_name
         except AttributeError:
             return obj.company.username
+
+    def get_progress(self, obj):
+        # Total requests made for this campaign
+        total_requests = obj.requests.count()
+        # Requests that were accepted
+        accepted_requests = obj.requests.filter(status='accepted').count()
+        # Active collaborations (ongoing or completed)
+        active_collabs = Collaboration.objects.filter(request__campaign=obj).count()
+        # Completed collaborations
+        completed_collabs = Collaboration.objects.filter(request__campaign=obj, status='completed').count()
+        # Total budget spent/committed
+        budget_spent = Collaboration.objects.filter(request__campaign=obj).aggregate(total=Sum('final_rate'))['total'] or 0
+        
+        return {
+            'total_requests': total_requests,
+            'accepted_requests': accepted_requests,
+            'active_collabs': active_collabs,
+            'completed_collabs': completed_collabs,
+            'budget_spent': budget_spent,
+            'hiring_rate': (accepted_requests / total_requests * 100) if total_requests > 0 else 0,
+            'completion_rate': (completed_collabs / active_collabs * 100) if active_collabs > 0 else 0
+        }
 
 class DirectCollaborationRequestSerializer(serializers.ModelSerializer):
     influencer_username = serializers.CharField(source='influencer.username', read_only=True)
