@@ -172,8 +172,8 @@ DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='')
 
 # Final Production Security & Host validation
 ALLOWED_HOSTS = [
-    'collabo-backend-y2de.onrender.com', 
     'collabo-backend-uyi4.onrender.com', 
+    'collabo-backend-y2de.onrender.com', 
     '.onrender.com', 
     'localhost', 
     '127.0.0.1'
@@ -183,12 +183,14 @@ ALLOWED_HOSTS = [
 CORS_ALLOW_ALL_ORIGINS = True  # Fallback for flexibility
 CORS_ALLOWED_ORIGINS = [
     "https://collabo-4q46.vercel.app",
+    "https://collabo-backend-uyi4.onrender.com", 
     "http://localhost:3000",
 ]
 CSRF_TRUSTED_ORIGINS = [
     "https://collabo-4q46.vercel.app",
     "https://*.onrender.com"
 ]
+
 
 # Security settings for production
 if not DEBUG:
