@@ -13,3 +13,6 @@ python manage.py collectstatic --no-input
 
 # Run migrations
 python manage.py migrate
+
+# Seed landing content (initial data)
+python scripts/seed_data.py
