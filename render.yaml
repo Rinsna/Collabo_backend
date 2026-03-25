@@ -4,7 +4,7 @@ services:
     env: python
     runtime: python
     buildCommand: "bash build.sh"
-    startCommand: "gunicorn influencer_platform.wsgi:application"
+    startCommand: "bash start.sh"
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
