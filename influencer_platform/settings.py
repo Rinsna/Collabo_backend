@@ -4,6 +4,8 @@ from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+# Define a persistent data directory for Render (default is /data)
+DATA_DIR = Path(config('DATA_DIR', default='/data'))
 
 SECRET_KEY = config('SECRET_KEY')
 
@@ -115,7 +117,10 @@ STORAGES = {
 }
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# Ensure Media is stored on the Persistent Disk
+MEDIA_ROOT = DATA_DIR / 'media'
+# Create media root if it doesn't exist
+os.makedirs(MEDIA_ROOT, exist_ok=True)
 
 # Custom User Model
 AUTH_USER_MODEL = 'accounts.User'
