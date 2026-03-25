@@ -3,7 +3,8 @@
 ## Prerequisites
 - Python 3.8 or higher
 - pip (Python package manager)
-- PostgreSQL (optional, SQLite works for development)
+- SQLite (Self-contained, no setup required)
+
 - Redis (optional, for Celery tasks)
 
 ## Quick Start
@@ -76,12 +77,9 @@ SECRET_KEY=your-secret-key
 DEBUG=False
 ALLOWED_HOSTS=your-domain.com,www.your-domain.com
 
-# Database (PostgreSQL)
-DB_NAME=collabo_db
-DB_USER=postgres
-DB_PASSWORD=your_password
-DB_HOST=localhost
-DB_PORT=5432
+# Database (SQLite by default)
+# No additional DB credentials needed.
+
 
 # Redis
 REDIS_URL=redis://localhost:6379
@@ -95,27 +93,9 @@ SOCIAL_MEDIA_ENCRYPTION_KEY=your_fernet_key
 STRIPE_SECRET_KEY=sk_test_your_key
 ```
 
-## Database Setup
+## Database Setup (SQLite Tracking)
+SQLite is used by default. The database file `db.sqlite3` will be created automatically in the root directory after running migrations.
 
-### Using SQLite (Default - Development)
-No additional setup needed. Database file `db.sqlite3` will be created automatically.
-
-### Using PostgreSQL (Production)
-```bash
-# Install PostgreSQL
-# Create database
-createdb collabo_db
-
-# Update .env with PostgreSQL credentials
-DB_NAME=collabo_db
-DB_USER=postgres
-DB_PASSWORD=your_password
-DB_HOST=localhost
-DB_PORT=5432
-
-# Run migrations
-python manage.py migrate
-```
 
 ## Optional: Celery Setup
 

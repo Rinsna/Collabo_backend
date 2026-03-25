@@ -236,6 +236,8 @@ def get_influencer_analytics(request):
         # Calculate total metrics
         total_followers = 0
         total_engagement = 0
+        total_views = 0
+        total_likes = 0
         platform_data = {}
         
         for account in social_accounts:
@@ -243,10 +245,14 @@ def get_influencer_analytics(request):
             if latest_history:
                 total_followers += latest_history.follower_count
                 total_engagement += float(latest_history.engagement_rate)
+                total_views += latest_history.views_count
+                total_likes += latest_history.likes_count
                 
                 platform_data[account.platform] = {
                     'followers': latest_history.follower_count,
                     'engagement_rate': float(latest_history.engagement_rate),
+                    'views': latest_history.views_count,
+                    'likes': latest_history.likes_count,
                     'username': account.username,
                     'last_updated': latest_history.recorded_at
                 }
@@ -299,6 +305,9 @@ def get_influencer_analytics(request):
                 'kpi': {
                     'total_followers': total_followers,
                     'engagement_rate': round(avg_engagement, 2),
+                    'total_views': total_views,
+                    'total_reach': total_views,  # Alias for frontend compatibility
+                    'total_likes': total_likes,
                     'active_collaborations': collab_stats['active_collaborations'],
                     'estimated_earnings': round(estimated_monthly_earnings, 2),
                     'follower_growth': 5.2,  # Mock - would calculate from historical data

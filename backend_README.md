@@ -15,10 +15,9 @@ venv\Scripts\activate  # Windows
 pip install -r ../requirements.txt
 ```
 
-### 3. Database Setup
-```bash
-# Create PostgreSQL database
-createdb collabo_db
+### 3. Database Setup (SQLite)
+No additional database setup is needed. SQLite runs out of the box.
+
 
 # Copy environment file
 copy .env.example .env
@@ -93,11 +92,9 @@ Required in `.env`:
 ```
 SECRET_KEY=your-django-secret-key
 DEBUG=True
-DB_NAME=collabo_db
-DB_USER=postgres
-DB_PASSWORD=your-password
-DB_HOST=localhost
-DB_PORT=5432
+# Database (SQLite by default)
+# No additional DB credentials needed.
+
 STRIPE_PUBLISHABLE_KEY=pk_test_...
 STRIPE_SECRET_KEY=sk_test_...
 REDIS_URL=redis://localhost:6379

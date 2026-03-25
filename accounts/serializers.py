@@ -70,7 +70,12 @@ class InfluencerProfileSerializer(serializers.ModelSerializer):
             'location', 'languages',
             'created_at', 'updated_at'
         ]
-        read_only_fields = ('user', 'created_at', 'updated_at')
+        read_only_fields = (
+            'user', 'created_at', 'updated_at', 
+            'followers_count', 'engagement_rate',
+            'latest_product_review_views', 'latest_product_review_likes',
+            'most_viewed_content_views', 'most_viewed_content_likes'
+        )
     
     def validate(self, attrs):
         # Remove any TikTok/Twitter fields if they somehow get sent

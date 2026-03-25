@@ -78,6 +78,13 @@ class SocialMediaSyncService:
             sync_job.accounts_successful = successful_syncs
             sync_job.accounts_failed = failed_syncs
             sync_job.error_details = error_details
+            
+            # Update all affected influencer profiles
+            affected_users = set(acc.user for acc in accounts if acc.user.user_type == 'influencer')
+            for user in affected_users:
+                if hasattr(user, 'influencer_profile'):
+                    self._update_influencer_profile(user.influencer_profile)
+            
             sync_job.mark_completed()
             
             logger.info(f"Sync job {job_id} completed: {successful_syncs} successful, {failed_syncs} failed")
@@ -267,6 +274,8 @@ class SocialMediaSyncService:
             
             total_followers = 0
             total_engagement = 0
+            total_likes = 0
+            total_views = 0
             account_count = 0
             
             for account in accounts:
@@ -275,15 +284,30 @@ class SocialMediaSyncService:
                 if latest_history:
                     total_followers += latest_history.follower_count
                     total_engagement += float(latest_history.engagement_rate)
+                    total_likes += latest_history.likes_count
+                    total_views += latest_history.views_count
                     account_count += 1
             
             # Update profile
             if account_count > 0:
                 profile.followers_count = total_followers
                 profile.engagement_rate = total_engagement / account_count
+                
+                # Update latest product review stats if they are currently 0 or we have new data
+                # This ensures the dashboard highlights show recent activity from the connected accounts
+                if total_likes > 0:
+                    profile.latest_product_review_likes = total_likes
+                if total_views > 0:
+                    profile.latest_product_review_views = total_views
+                
+                # Also update most viewed if it's lower than current latest (or just keep it in sync)
+                if profile.most_viewed_content_views < profile.latest_product_review_views:
+                    profile.most_viewed_content_views = profile.latest_product_review_views
+                    profile.most_viewed_content_likes = profile.latest_product_review_likes
+                
                 profile.save()
                 
-                logger.info(f"Updated influencer profile for {profile.user}: {total_followers} followers")
+                logger.info(f"Updated influencer profile for {profile.user}: {total_followers} followers, {total_likes} likes")
         
         except Exception as e:
             logger.error(f"Failed to update influencer profile {profile}: {e}")

@@ -3,7 +3,7 @@ services:
     name: collabo-backend
     env: python
     runtime: python
-    buildCommand: "./build.sh"
+    buildCommand: "bash build.sh"
     startCommand: "gunicorn influencer_platform.wsgi:application"
     envVars:
       - key: PYTHON_VERSION
@@ -12,3 +12,9 @@ services:
         generateValue: true
       - key: DEBUG
         value: False
+      - key: DB_PATH
+        value: /data/db.sqlite3
+    disk:
+      name: collabo-data
+      mountPath: /data
+      sizeGB: 1
