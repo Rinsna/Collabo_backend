@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config('SECRET_KEY')
 
-# DEBUG = config('DEBUG', default=False, cast=bool)
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 
 
@@ -170,12 +170,29 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='')
 
-# DIAGNOSTIC OVERRIDE
-DEBUG = True
-ALLOWED_HOSTS = ['*']
+# Final Production Security & Host validation
+ALLOWED_HOSTS = [
+    'collabo-backend-y2de.onrender.com', 
+    'collabo-backend-uyi4.onrender.com', 
+    '.onrender.com', 
+    'localhost', 
+    '127.0.0.1'
+]
+
+# CORS & CSRF Configuration
+CORS_ALLOW_ALL_ORIGINS = True  # Fallback for flexibility
+CORS_ALLOWED_ORIGINS = [
+    "https://collabo-4q46.vercel.app",
+    "http://localhost:3000",
+]
+CSRF_TRUSTED_ORIGINS = [
+    "https://collabo-4q46.vercel.app",
+    "https://*.onrender.com"
+]
 
 # Security settings for production
 if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = 'DENY'
@@ -186,8 +203,9 @@ if not DEBUG:
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
 else:
-    # Ensure proxy header is still handled for diagnostics if needed
+    # Always set proxy header on Render environments
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 
 
 
