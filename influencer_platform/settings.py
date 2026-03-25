@@ -119,8 +119,13 @@ STORAGES = {
 MEDIA_URL = '/media/'
 # Ensure Media is stored on the Persistent Disk
 MEDIA_ROOT = DATA_DIR / 'media'
-# Create media root if it doesn't exist
-os.makedirs(MEDIA_ROOT, exist_ok=True)
+# Create media root if it doesn't exist (safe for read-only build environments)
+try:
+    if not os.path.exists(MEDIA_ROOT):
+        os.makedirs(MEDIA_ROOT, exist_ok=True)
+except OSError:
+    # This might happen during Render build time when /data is not mounted
+    pass
 
 # Custom User Model
 AUTH_USER_MODEL = 'accounts.User'
