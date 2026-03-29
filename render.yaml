@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: collabo-backend
+    env: python
+    runtime: python
+    buildCommand: "bash build.sh"
+    startCommand: "bash start.sh"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: False
+      - key: ALLOWED_HOSTS
+        value: "collabo-backend-uyi4.onrender.com,*.onrender.com,localhost"
+      - key: DB_PATH
+        value: /data/db.sqlite3
+    disk:
+      name: collabo-data
+      mountPath: /data
+      sizeGB: 1
