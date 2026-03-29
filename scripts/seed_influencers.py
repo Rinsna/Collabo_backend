@@ -73,7 +73,7 @@ def seed_influencers():
 
     for data in influencers_data:
         # Check by email
-        user, created = User.objects.get_or_create(
+        user, created = User.objects.update_or_create(
             email=data["email"],
             defaults={
                 "username": data["username"],
@@ -83,9 +83,12 @@ def seed_influencers():
             }
         )
         
+        # Always guarantee the password for demo data
+        user.set_password("password123")
         if created:
-            user.set_password("password123")
             print(f"Created influencer user: {data['username']}")
+        else:
+            print(f"Updated user password & details: {data['username']}")
         
         # Ensure profile exists and is updated
         profile, p_created = InfluencerProfile.objects.update_or_create(
