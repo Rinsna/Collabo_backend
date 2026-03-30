@@ -16,6 +16,7 @@ python manage.py migrate --noinput
 echo ">>> Seeding initial data..."
 python scripts/seed_data.py
 python scripts/seed_influencers.py
+python scripts/seed_superuser.py
 
 # Final Startup
 echo ">>> Starting Gunicorn server..."
