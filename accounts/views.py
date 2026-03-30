@@ -675,6 +675,35 @@ def delete_influencer(request, user_id):
     }, status=status.HTTP_200_OK)
 
 
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def admin_reset_password(request, user_id):
+    """
+    Admin endpoint to reset any user's password.
+    Expects: { "new_password": "..." }
+    """
+    try:
+        user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        return Response({
+            'error': 'User not found'
+        }, status=status.HTTP_404_NOT_FOUND)
+
+    new_password = request.data.get('new_password', '').strip()
+
+    if not new_password or len(new_password) < 6:
+        return Response({
+            'error': 'Password must be at least 6 characters long.'
+        }, status=status.HTTP_400_BAD_REQUEST)
+
+    user.set_password(new_password)
+    user.save()
+
+    return Response({
+        'message': f'Password for {user.username} ({user.email}) has been reset successfully.'
+    }, status=status.HTTP_200_OK)
+
+
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def approval_stats(request):

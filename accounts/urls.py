@@ -8,7 +8,8 @@ from .views import (
     # Admin approval views
     PendingInfluencersListView, AllInfluencersListView, AllUsersListView,
     approve_influencer, reject_influencer, bulk_approve_influencers,
-    delete_influencer, approval_stats, mark_approval_shown
+    delete_influencer, approval_stats, mark_approval_shown,
+    admin_reset_password
 )
 
 urlpatterns = [
@@ -38,4 +39,7 @@ urlpatterns = [
     
     # Influencer approval status
     path('mark-approval-shown/', mark_approval_shown, name='mark-approval-shown'),
+    
+    # Admin password reset
+    path('admin/reset-password/<int:user_id>/', admin_reset_password, name='admin-reset-password'),
 ]
